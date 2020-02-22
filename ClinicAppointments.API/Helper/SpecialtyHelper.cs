@@ -1,14 +1,12 @@
 ﻿using ClinicAppointments.Domain;
 using ClinicAppointments.Repository;
 using ClinicAppointments.Repository.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace ClinicAppointments.API.Helper
 {
-  public class SpecialtyHelper : ISpecialtyHelper
+  public class SpecialtyHelper
   {
     private ISpecialtyRepository _specialtyRepository;
 
@@ -17,6 +15,10 @@ namespace ClinicAppointments.API.Helper
       _specialtyRepository = new SpecialtyRepository();
     }
 
+    /// <summary>
+    /// Get the full list of specialties
+    /// </summary>
+    /// <returns></returns>
     public List<Specialty> GetSpecialties()
     {
       List<SQL.Specialties> spDb = _specialtyRepository.GetAll().ToList();
@@ -31,6 +33,11 @@ namespace ClinicAppointments.API.Helper
       return spDom;
     }
 
+    /// <summary>
+    /// Get an specific specialty
+    /// </summary>
+    /// <param name="id">Specialty id</param>
+    /// <returns></returns>
     public Specialty GetSpecialtyById(int id)
     {
       SQL.Specialties spDb = _specialtyRepository.GetSpecialtiesById(id);

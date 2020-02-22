@@ -7,19 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ClinicAppointments.SQL
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class Appointments
-    {
-        public int PatientId { get; set; }
-        public int SpecialtyId { get; set; }
-        public System.DateTime AppointmentDateTime { get; set; }
-        public int Id { get; set; }
-    
-        public virtual Patients Patients { get; set; }
-        public virtual Specialties Specialties { get; set; }
-    }
+
+  public partial class Appointments
+  {
+    public int PatientId { get; set; }
+    public int SpecialtyId { get; set; }
+    public System.DateTime AppointmentDateTime { get; set; }
+    public int Id { get; set; }
+
+    [ForeignKey("PatientId")]
+    public virtual Patients Patients { get; set; }
+
+    [ForeignKey("SpecialtyId")]
+    public virtual Specialties Specialties { get; set; }
+  }
 }

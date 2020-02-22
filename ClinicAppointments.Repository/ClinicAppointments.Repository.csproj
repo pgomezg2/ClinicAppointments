@@ -55,9 +55,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppointmentRepository.cs" />
     <Compile Include="GenericRepository.cs" />
+    <Compile Include="Interfaces\IAppointmentRepository.cs" />
     <Compile Include="Interfaces\IGenericRepository.cs" />
+    <Compile Include="Interfaces\IPatientRepository.cs" />
     <Compile Include="Interfaces\ISpecialtyRepository.cs" />
+    <Compile Include="PatientRepository.cs" />
     <Compile Include="SpecialtyRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

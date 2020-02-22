@@ -94,12 +94,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\SpecialtyController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\ISpecialtyHelper.cs" />
+    <Compile Include="Helper\AppointmentHelper.cs" />
+    <Compile Include="Helper\PatientHelper.cs" />
     <Compile Include="Helper\SpecialtyHelper.cs" />
+    <Compile Include="Models\AppointmentModel.cs" />
+    <Compile Include="Models\PatientModel.cs" />
+    <Compile Include="Models\SpecialtyModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -113,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClinicAppointments.Domain\ClinicAppointments.Domain.csproj">

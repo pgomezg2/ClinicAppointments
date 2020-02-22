@@ -32,5 +32,32 @@ namespace ClinicAppointments.Repository
     {
       return Dbset.Find(id);
     }
+
+    public void Insert(T obj)
+    {
+      Dbset.Add(obj);
+    }
+
+    public void Update(T obj)
+    {
+      Dbset.Attach(obj);
+
+      _context.Entry(obj).State = EntityState.Modified;
+    }
+
+    public void Delete(object id)
+    {
+      T item = Dbset.Find(id);
+
+      if (item != null)
+      {
+        Dbset.Remove(item);
+      }
+    }
+
+    public void Save()
+    {
+      _context.SaveChanges();
+    }
   }
 }
