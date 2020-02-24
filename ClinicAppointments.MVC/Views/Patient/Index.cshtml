@@ -1,64 +1,77 @@
 ﻿@model IEnumerable<ClinicAppointments.MVC.Models.PatientModel>
 
 @{
-        /**/
+  /**/
 
-        ViewBag.Title = "Index";
+  ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Patients</h2>
 
 <p>
-  @Html.ActionLink("Create New", "Create")
+  <a href="/Patient/Create" class="btn btn-primary" role="button">New Patient</a>
 </p>
-<table class="table table-condensed table-hover table-responsive">
-  <tr>
-    <th>
-      @Html.DisplayNameFor(model => model.Identification)
-    </th>
-    <th>
-      @Html.DisplayNameFor(model => model.FirstName)
-    </th>
-    <th>
-      @Html.DisplayNameFor(model => model.LastName)
-    </th>
-    <th>
-      @Html.DisplayNameFor(model => model.Age)
-    </th>
-    <th>
-      @Html.DisplayNameFor(model => model.PhoneNumber)
-    </th>
-    <th>
-      @Html.DisplayNameFor(model => model.Email)
-    </th>
-    <th></th>
-  </tr>
 
-  @foreach (var item in Model)
-  {
-<tr>
-  <td>
-    @Html.DisplayFor(modelItem => item.Identification)
-  </td>
-  <td>
-    @Html.DisplayFor(modelItem => item.FirstName)
-  </td>
-  <td>
-    @Html.DisplayFor(modelItem => item.LastName)
-  </td>
-  <td>
-    @Html.DisplayFor(modelItem => item.Age)
-  </td>
-  <td>
-    @Html.DisplayFor(modelItem => item.PhoneNumber)
-  </td>
-  <td>
-    @Html.DisplayFor(modelItem => item.Email)
-  </td>
-  <td>
-    @Html.ActionLink("Create appointment", "Create", "Appointment", new { id = item.Id }, null)
-  </td>
-</tr>
-}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><strong>Patients list</strong></h3>
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped">
+        <tr>
+          <th>
+            @Html.DisplayNameFor(model => model.Identification)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.LastName)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.Age)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.Email)
+          </th>
+          <th></th>
+        </tr>
 
-</table>
+        @foreach (var item in Model)
+        {
+          <tr>
+            <td>
+              @Html.DisplayFor(modelItem => item.Identification)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+              @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+              @Html.ActionLink("Create appointment", "Create", "Appointment", new { id = item.Id }, null)
+            </td>
+          </tr>
+        }
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+

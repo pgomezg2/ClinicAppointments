@@ -8,5 +8,7 @@ namespace ClinicAppointments.MVC.Managers
     AppointmentModel GetAppointmentCreationInformation(int patientId);
 
     string CreateAppointment(AppointmentModel appointment);
+
+    IEnumerable<AppointmentModel> GetAppointmentsByPatient(int patientId);
   }
 }

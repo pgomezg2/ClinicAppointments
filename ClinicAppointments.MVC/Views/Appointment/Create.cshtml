@@ -62,6 +62,8 @@
     </div>
   </div>
 
+  <div id="msgExistingAppointment" class="alert alert-danger" role="alert" style="display:none"><strong>Error. </strong>Patient already have an appointment for the selected date</div>
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title"><strong>Appointment information</strong></h3>
@@ -185,6 +187,8 @@
     }
 
     function validateInformation() {
+      var msgError; //<strong>Warning!</strong> Better check yourself, you're not looking too good.
+
       var appointmentDate = $("#datePick").val();
       var appointmentTime = $("#timePick").val();
       var SpecialtyId = $("#Specialties").val();
@@ -211,6 +215,17 @@
         $("#dateSelected").val(appointmentDate);
       }
 
+      //if (!validAppointment()) {
+      //  $("#grpDate").addClass('has-error');
+      //  $("#msgExistingAppointment").show();
+      //  return false;
+      //}
+      //else {
+      //  $("#grpDate").removeClass('has-error');
+      //  $("#msgExistingAppointment").hide();
+      //  $("#dateSelected").val(appointmentDate);
+      //}
+
       if (!appointmentTime) {
         $("#grpTime").addClass('has-error');
         $("#msgTime").show();
@@ -223,6 +238,29 @@
       }
 
       return true;
+    }
+
+    function validAppointment() {
+      var isValidAppointment = true;
+      var strDatePicked = $("#datePick").val();
+
+      $.ajax({
+        type: "GET",
+        url: "http://local.clinicappointmentsapi.com/api/appointment/patient/" + $("#patientId").val(),
+        data: {},
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (result) {
+          for (var i = 0; i < result.length; i++) {
+            var strDateFromDB = result[i].AppointmentDateTime.substring(0, 10);
+
+            if (strDatePicked == strDateFromDB) {
+              isValidAppointment = false;
+            }
+          }
+          return isValidAppointment;
+        }
+      });
     }
 
     function createAppointment() {
@@ -245,5 +283,6 @@
         }
       });
     }
+
   </script>
 }

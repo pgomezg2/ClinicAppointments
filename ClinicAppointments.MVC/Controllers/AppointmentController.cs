@@ -54,6 +54,11 @@ namespace ClinicAppointments.MVC.Controllers
 
         string msg = _appointmentManager.CreateAppointment(appointment);
 
+        if (!string.IsNullOrEmpty(msg))
+        {
+          ViewBag.ErrorDateExist = msg;
+        }
+
         return RedirectToAction("Create", "Appointment", new { id = appointment.PatientId });
       }
       catch
