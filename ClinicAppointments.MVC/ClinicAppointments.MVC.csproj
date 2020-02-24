@@ -120,12 +120,20 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Managers\AppointmentManager.cs" />
+    <Compile Include="Managers\IAppointmentManager.cs" />
+    <Compile Include="Managers\IPatientManager.cs" />
+    <Compile Include="Managers\PatientManager.cs" />
+    <Compile Include="Managers\SpecialtyManager.cs" />
+    <Compile Include="Models\AppointmentViewModel.cs" />
     <Compile Include="Models\PatientViewModel.cs" />
+    <Compile Include="Models\SpecialtyViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +174,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Patient\Index.cshtml" />
     <Content Include="Views\Patient\Create.cshtml" />
+    <Content Include="Views\Appointment\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

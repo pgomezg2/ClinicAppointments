@@ -1,0 +1,157 @@
+﻿@model ClinicAppointments.MVC.Models.AppointmentModel
+
+@{
+  /**/
+
+  ViewBag.Title = "Create";
+}
+
+<h2>Create patient appointment</h2>
+
+@using (Html.BeginForm())
+{
+  @Html.AntiForgeryToken()
+
+<div class="form">
+  <hr />
+  @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><strong>Patient information</strong></h3>
+    </div>
+    <div class="panel-body">
+      @Html.HiddenFor(model => model.Patient.Id, htmlAttributes : new { @id = "patientId" })
+      <table class="table table-condensed table-responsive">
+        <tr>
+          <th>
+            @Html.DisplayNameFor(model => model.Patient.Identification)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.Patient.FirstName)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.Patient.LastName)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.Patient.PhoneNumber)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.Patient.Email)
+          </th>
+        </tr>
+        <tr>
+          <td>
+            @Html.DisplayFor(model => model.Patient.Identification)
+          </td>
+          <td>
+            @Html.DisplayFor(model => model.Patient.FirstName)
+          </td>
+          <td>
+            @Html.DisplayFor(model => model.Patient.LastName)
+          </td>
+          <td>
+            @Html.DisplayFor(model => model.Patient.PhoneNumber)
+          </td>
+          <td>
+            @Html.DisplayFor(model => model.Patient.Email)
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><strong>Appointment information</strong></h3>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        @Html.Label("Specialty", "Specialty", htmlAttributes: new { @class = "control-label col-md-2" })
+
+        <select class="form-control" id="Specialties" name="Specialties">
+          <option value="0">Select specialty</option>
+        </select>
+      </div>
+      <div class="form-group">
+        @Html.Label("Date", "Date", htmlAttributes: new { @class = "control-label col-md-2" })
+        <input type="date" class="form-control" id="datePick" placeholder="Date">
+      </div>
+      <div class="form-group">
+        @Html.Label("Time", "Time", htmlAttributes: new { @class = "control-label col-md-2" })
+        <input type="time" class="form-control" id="timePick" placeholder="Time">
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-10">
+          <input type="button" value="Create" class="btn btn-primary" onclick="createAppointment();" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><strong>Patient appointments</strong></h3>
+    </div>
+    <div class="panel-body">
+      <table class="table table-condensed table-responsive">
+        <tr>
+          <th>
+            @Html.DisplayNameFor(model => model.Specialty.SpecialtyName)
+          </th>
+          <th>
+            @Html.DisplayNameFor(model => model.AppointmentDateTime)
+          </th>
+        </tr>
+        @foreach (var item in Model.Patient.Appointments)
+        {
+          <tr>
+            <td>
+              @Html.DisplayFor(model => item.Specialty.SpecialtyName)
+            </td>
+            <td>
+              @Html.DisplayFor(model => item.AppointmentDateTime)
+            </td>
+          </tr>
+        }
+      </table>
+    </div>
+  </div>
+
+</div>
+}
+
+<div>
+  @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+  @Scripts.Render("~/bundles/jqueryval")
+
+  <script type="text/javascript">
+
+    $(document).ready(function () {
+      loadSpecialties();
+    })
+
+    function loadSpecialties() {
+      $.ajax({
+        type: "GET",
+        url: "http://local.clinicappointmentsapi.com/api/specialty",
+        data: {},
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (specialtiesArr) {
+          $.each(specialtiesArr, function (key, value) {
+            $('#Specialties')
+              .append($("<option></option>")
+              .attr("value", value.Id)
+                .text(value.SpecialtyName));
+          });
+        }
+      });
+    }
+
+  </script>
+}

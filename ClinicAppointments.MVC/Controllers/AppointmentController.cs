@@ -6,53 +6,43 @@ using ClinicAppointments.MVC.Models;
 
 namespace ClinicAppointments.MVC.Controllers
 {
-  public class PatientController : Controller
+  public class AppointmentController : Controller
   {
-    private readonly PatientManager _patientManager;
+    private readonly AppointmentManager _appointmentManager;
 
-    public PatientController()
+    public AppointmentController()
     {
-      _patientManager = new PatientManager();
+      _appointmentManager = new AppointmentManager(new PatientManager());
     }
-
-    // GET: Patient
+    
+    // GET: Appointment
     public ActionResult Index()
     {
-      return View(_patientManager.GetPatients());
+      return View();
     }
 
-    // GET: Patient/Details/5
+    // GET: Appointment/Details/5
     public ActionResult Details(int id)
     {
       return View();
     }
 
-    // GET: Patient/Create
-    public ActionResult Create()
+    // POST: Appointment/Create
+    [HttpGet]
+    public ActionResult Create(int id)
     {
-      return View();
+      return View(_appointmentManager.GetAppointmentCreationInformation(id));
     }
 
-    // POST: Patient/Create
+    // POST: Appointment/Create
     [HttpPost]
     public ActionResult Create(FormCollection collection)
     {
       try
       {
-        // Get the patient detail
-        PatientModel patient = new PatientModel
-        {
-          Identification = collection["Identification"],
-          FirstName = collection["FirstName"],
-          LastName = collection["LastName"],
-          Age = Convert.ToInt16(collection["Age"]),
-          PhoneNumber = collection["PhoneNumber"],
-          Email = collection["Email"]
-        };
+        // TODO: Add insert logic here
 
-        string msg = _patientManager.CreatePatient(patient);
-
-        return RedirectToAction("Index");
+        return RedirectToAction("Index", "Patient");
       }
       catch
       {
@@ -60,13 +50,13 @@ namespace ClinicAppointments.MVC.Controllers
       }
     }
 
-    // GET: Patient/Edit/5
+    // GET: Appointment/Edit/5
     public ActionResult Edit(int id)
     {
       return View();
     }
 
-    // POST: Patient/Edit/5
+    // POST: Appointment/Edit/5
     [HttpPost]
     public ActionResult Edit(int id, FormCollection collection)
     {
@@ -82,13 +72,13 @@ namespace ClinicAppointments.MVC.Controllers
       }
     }
 
-    // GET: Patient/Delete/5
+    // GET: Appointment/Delete/5
     public ActionResult Delete(int id)
     {
       return View();
     }
 
-    // POST: Patient/Delete/5
+    // POST: Appointment/Delete/5
     [HttpPost]
     public ActionResult Delete(int id, FormCollection collection)
     {

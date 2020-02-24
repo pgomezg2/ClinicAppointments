@@ -23,12 +23,12 @@ namespace ClinicAppointments.Repository
 
     public Patients GetPatientsById(int id)
     {
-      return _context.Patients.Find(id);
+      return _context.Patients.Include("Appointments.Specialties").Where(p => p.Id == id).FirstOrDefault();
     }
 
     public Patients GetPatientsByIdentification(string identification)
     {
-      return _context.Patients.Where(p => p.Identification == identification).FirstOrDefault();
+      return _context.Patients.Include("Appointments.Specialties").Where(p => p.Identification == identification).FirstOrDefault();
     }
   }
 }

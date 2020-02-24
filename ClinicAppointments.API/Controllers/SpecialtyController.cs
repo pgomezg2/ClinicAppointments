@@ -1,9 +1,11 @@
 ﻿using System.Web.Http;
-
+using System.Web.Http.Cors;
 using ClinicAppointments.API.Helper;
 
 namespace ClinicAppointments.API.Controllers
 {
+  [RoutePrefix("api/specialty")]
+  [EnableCors(origins: "*", headers: "*", methods: "*")]
   public class SpecialtyController : ApiController
   {
     SpecialtyHelper _spHelper;

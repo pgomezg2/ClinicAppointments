@@ -7,9 +7,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace ClinicAppointments.API.Controllers
 {
+  [RoutePrefix("api/patient")]
+  [EnableCors(origins: "*", headers: "*", methods: "*")]
   public class PatientController : ApiController
   {
     readonly PatientHelper _patientHelper;
@@ -32,9 +35,10 @@ namespace ClinicAppointments.API.Controllers
     }
 
     [HttpGet]
-    public IHttpActionResult GetPatientByIdentification(string identificacion)
+    [Route("identification/{identification}")]
+    public IHttpActionResult GetPatientByIdentification(string identification)
     {
-      return Ok(_patientHelper.GetPatientByIdentification(identificacion));
+      return Ok(_patientHelper.GetPatientByIdentification(identification));
     }
 
     [HttpPost]

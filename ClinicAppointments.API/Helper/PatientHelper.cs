@@ -64,8 +64,25 @@ namespace ClinicAppointments.API.Helper
           LastName = ptDb.LastName,
           Age = 0,
           PhoneNumber = ptDb.PhoneNumber,
-          Email = ptDb.Email
+          Email = ptDb.Email,
+          Appointments = Enumerable.Empty<Appointment>().ToList()
         };
+
+        foreach (SQL.Appointments item in ptDb.Appointments)
+        {
+          pt.Appointments.Add(new Appointment
+          {
+            Id = item.Id,
+            PatientId = item.PatientId,
+            SpecialtyId = item.SpecialtyId,
+            AppointmentDateTime = item.AppointmentDateTime,
+            Specialty = new Specialty
+            {
+              Id = item.Specialties.Id,
+              SpecialtyName = item.Specialties.SpecialtyName
+            }
+          });
+        }
 
         return pt;
       }
@@ -92,10 +109,27 @@ namespace ClinicAppointments.API.Helper
           Identification = ptDb.Identification,
           FirstName = ptDb.FirstName,
           LastName = ptDb.LastName,
-          Age = 0,
+          Age = ptDb.Age.GetValueOrDefault(),
           PhoneNumber = ptDb.PhoneNumber,
-          Email = ptDb.Email
+          Email = ptDb.Email,
+          Appointments = Enumerable.Empty<Appointment>().ToList()
         };
+
+        foreach (SQL.Appointments item in ptDb.Appointments)
+        {
+          pt.Appointments.Add(new Appointment
+          {
+            Id = item.Id,
+            PatientId = item.PatientId,
+            SpecialtyId = item.SpecialtyId,
+            AppointmentDateTime = item.AppointmentDateTime,
+            Specialty = new Specialty
+            {
+              Id = item.Specialties.Id,
+              SpecialtyName = item.Specialties.SpecialtyName
+            }
+          });
+        }
 
         return pt;
       }
