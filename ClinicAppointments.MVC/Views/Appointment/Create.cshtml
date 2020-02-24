@@ -16,7 +16,7 @@
   <hr />
   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-  <div id="msgExistingAppointment" class="alert alert-danger" role="alert" style="display:none"><strong>Error. </strong>Patient already have an appointment for the selected date</div>
+  <div id="msgError" class="alert alert-danger" role="alert" style="display:none"></div>
 
   <div class="panel panel-primary">
     <div class="panel-heading">
@@ -24,6 +24,9 @@
     </div>
     <div class="panel-body">
       @Html.HiddenFor(model => model.Patient.Id, htmlAttributes: new { @id = "patientId" })
+      @Html.Hidden("specialtyId", "0", htmlAttributes: new { @id = "specialtyId" })
+      @Html.Hidden("dateSelected", "0", htmlAttributes: new { @id = "dateSelected" })
+      @Html.Hidden("timeSelected", "0", htmlAttributes: new { @id = "timeSelected" })
 
       <table class="table table-condensed table-responsive">
         <tr>
@@ -74,7 +77,6 @@
             Time
           </th>
         </tr>
-
         <tr>
           <td>
             <select class="form-control" id="Specialties" name="Specialties">
@@ -88,62 +90,13 @@
           </td>
           <td>
             <input type="time" class="form-control" id="timePick" placeholder="Time">
-            <span id="msgTime" class="text-danger" style="display:none">You must select a valid date</span>
+            <span id="msgTime" class="text-danger" style="display:none">You must select a valid time</span>
           </td>
         </tr>
       </table>
       <div class="col-md-4">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <input type="button" value="Create" class="btn btn-primary" onclick="createAppointment()" />
         @Html.ActionLink("Back to list", "Index", "Patient", null, htmlAttributes: new { @class = "btn btn-danger" })
-
-      </div>
-
-    </div>
-  </div>
-
-
-  <div class="panel panel-default" style="display:none">
-    <div class="panel-heading">
-      <h3 class="panel-title"><strong>Appointment information</strong></h3>
-    </div>
-    <div class="panel-body">
-      <div id="grpSpecialty" class="form-group">
-        @Html.Hidden("specialtyId", "0", htmlAttributes: new { @id = "specialtyId" })
-        @Html.Label("Specialty", "Specialty", htmlAttributes: new { @class = "control-label col-md-2" })
-
-        <div class="col-md-10">
-          <select class="form-control" id="Specialties1" name="Specialties1">
-            <option value="0">Select specialty</option>
-          </select>
-          <span id="msgSpecialty" class="text-danger" style="display:none">You must select a specialty</span>
-        </div>
-      </div>
-      <br /><br />
-      <div id="grpDate" class="form-group">
-        @Html.Hidden("dateSelected", "0", htmlAttributes: new { @id = "dateSelected" })
-        @Html.Label("Date", "Date", htmlAttributes: new { @class = "control-label col-md-2" })
-
-        <div class="col-md-10">
-          <input type="date" class="form-control" id="datePick" placeholder="Date">
-          <span id="msgDate" class="text-danger" style="display:none">You must select a valid date</span>
-        </div>
-      </div>
-      <br /><br />
-      <div id="grpTime" class="form-group">
-        @Html.Hidden("timeSelected", "0", htmlAttributes: new { @id = "timeSelected" })
-        @Html.Label("Time", "Time", htmlAttributes: new { @class = "control-label col-md-2" })
-
-        <div class="col-md-10">
-          <input type="time" class="form-control" id="timePick" placeholder="Time">
-          <span id="msgTime" class="text-danger" style="display:none">You must select a valid date</span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="col-md-10">
-          <input type="submit" value="Create" class="btn btn-primary" />
-
-        </div>
       </div>
     </div>
   </div>
@@ -172,25 +125,19 @@
                 @Html.DisplayFor(model => item.Specialty.SpecialtyName)
               </td>
               <td>
-                @Html.DisplayFor(model => item.AppointmentDateTime)
+                @item.AppointmentDateTime.ToString("yyyy-MM-dd HH:mm")
               </td>
               <td>
-                @Html.ActionLink("Cancel appointment", "Delete", "Appointment", new { id = item.Id }, null)
+                <a href="#" onclick="deleteAppointment(@item.Id);">Cancel appointment</a>
               </td>
             </tr>
           }
         }
-
       </table>
     </div>
   </div>
-
 </div>
 }
-
-<div style="display:none">
-  @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
   @Scripts.Render("~/bundles/jqueryval")
@@ -200,11 +147,11 @@
     $(document).ready(function () {
       loadSpecialties();
 
-      $("#createAppointmentForm").submit(function (e) {
-        if (!validateInformation()) {
-          e.preventDefault();
-        }
-      });
+      //$("#createAppointmentForm").submit(function (e) {
+      //  if (!validateInformation()) {
+      //    e.preventDefault();
+      //  }
+      //});
     })
 
     function loadSpecialties() {
@@ -226,52 +173,48 @@
     }
 
     function validateInformation() {
-      var msgError; //<strong>Warning!</strong> Better check yourself, you're not looking too good.
+      $("#msgError").hide();
+      $("#msgError").html('');
 
       var appointmentDate = $("#datePick").val();
       var appointmentTime = $("#timePick").val();
       var SpecialtyId = $("#Specialties").val();
 
+      var CurrentDate = new Date();
+      GivenDate = new Date(appointmentDate);
+
+      // Check if selected specialty
       if (SpecialtyId == 0) {
-        $("#grpSpecialty").addClass('has-error');
         $("#msgSpecialty").show();
         return false;
       }
       else {
-        $("#grpSpecialty").removeClass('has-error');
         $("#msgSpecialty").hide();
         $("#specialtyId").val(SpecialtyId);
       }
 
+      // Check if selected date
       if (!appointmentDate) {
-        $("#grpDate").addClass('has-error');
+        $("#msgDate").html("You must select a valid date");
+        $("#msgDate").show();
+        return false;
+      }
+      // Check if selected date is greater than today's
+      else if (GivenDate < CurrentDate) {
+        $("#msgDate").html("Date must be greater than today");
         $("#msgDate").show();
         return false;
       }
       else {
-        $("#grpDate").removeClass('has-error');
         $("#msgDate").hide();
         $("#dateSelected").val(appointmentDate);
       }
 
-      //if (!validAppointment()) {
-      //  $("#grpDate").addClass('has-error');
-      //  $("#msgExistingAppointment").show();
-      //  return false;
-      //}
-      //else {
-      //  $("#grpDate").removeClass('has-error');
-      //  $("#msgExistingAppointment").hide();
-      //  $("#dateSelected").val(appointmentDate);
-      //}
-
       if (!appointmentTime) {
-        $("#grpTime").addClass('has-error');
         $("#msgTime").show();
         return false;
       }
       else {
-        $("#grpTime").removeClass('has-error');
         $("#msgTime").hide();
         $("#timeSelected").val(appointmentTime);
       }
@@ -279,30 +222,12 @@
       return true;
     }
 
-    function validAppointment() {
-      var isValidAppointment = true;
-      var strDatePicked = $("#datePick").val();
-
-      $.ajax({
-        type: "GET",
-        url: "http://local.clinicappointmentsapi.com/api/appointment/patient/" + $("#patientId").val(),
-        data: {},
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function (result) {
-          for (var i = 0; i < result.length; i++) {
-            var strDateFromDB = result[i].AppointmentDateTime.substring(0, 10);
-
-            if (strDatePicked == strDateFromDB) {
-              isValidAppointment = false;
-            }
-          }
-          return isValidAppointment;
-        }
-      });
-    }
-
     function createAppointment() {
+      // Check the valid information entered
+      if (!validateInformation()) {
+        return;
+      }
+
       var fullDateTime = $("#datePick").val() + " " + $("#timePick").val();
 
       var appointmentModel = {
@@ -318,7 +243,35 @@
         dataType: 'json',
         contentType: 'application/json',
         success: function (result) {
-          temporal(result);
+          if (result == 'Success') {
+            location.reload();
+          }
+          else {
+            $("#msgError").html(result);
+            $("#msgError").show();
+          }
+        }
+      });
+    }
+
+    function deleteAppointment(id) {
+      $("#msgError").hide();
+      $("#msgError").html('');
+
+      $.ajax({
+        type: "DELETE",
+        url: "http://local.clinicappointmentsapi.com/api/appointment/" + id,
+        data: {},
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (result) {
+          if (result == 'Success') {
+            location.reload();
+          }
+          else {
+            $("#msgError").html(result);
+            $("#msgError").show();
+          }
         }
       });
     }

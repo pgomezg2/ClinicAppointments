@@ -3,6 +3,7 @@ using ClinicAppointments.API.Models;
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -43,16 +44,45 @@ namespace ClinicAppointments.API.Controllers
         return BadRequest(ModelState);
       }
 
-      _appointmentHelper.CreateAppointment(model);
+      // Check if the patient already have one appointment for the given date 
+      Domain.Appointment appointment = _appointmentHelper.GetAppointmentsByPatient(model.PatientId).Where(a => a.AppointmentDateTime.Date == model.AppointmentDateTime.Date).FirstOrDefault();
 
-      return Ok();
+      // No appointments for the given date
+      if (appointment == null)
+      {
+        _appointmentHelper.CreateAppointment(model);
+        return Ok("Success");
+      }
+      else
+      {
+        return Ok(string.Format("You already have an appointment for {0}", model.AppointmentDateTime.ToString("yyyy-MM-dd")));
+      }
+
     }
 
     [HttpDelete]
     public IHttpActionResult DeleteAppointment(int id)
     {
-      _appointmentHelper.DeleteAppointment(id);
-      return Ok();
+      // Get the maximum cancellation hours
+      int maxHoursCancellation = Convert.ToInt16(ConfigurationManager.AppSettings["MaxHoursCancellation"]);
+
+      // Get the appointment detail
+      Domain.Appointment appointment = _appointmentHelper.GetAppointments().Where(a => a.Id == id).FirstOrDefault();
+
+      // Check status for the result
+      if (appointment == null)
+      {
+        return Ok(string.Format("The appointment does not exist."));
+      }
+      else if ((appointment.AppointmentDateTime - DateTime.Now).TotalHours < maxHoursCancellation)
+      {
+        return Ok(string.Format("Appointments cannot be canceled less than {0} hours in advance.",maxHoursCancellation));
+      }
+      else
+      {
+        _appointmentHelper.DeleteAppointment(id);
+        return Ok("Success");
+      }
     }
   }
 }

@@ -34,7 +34,7 @@
       </tr>
     </thead>
     <tbody>
-      @foreach (var item in Model)
+      @foreach (var item in Model.OrderByDescending(m => m.AppointmentDateTime))
       {
         <tr>
           <td>
@@ -47,7 +47,8 @@
             @Html.DisplayFor(modelItem => item.Patient.PhoneNumber)
           </td>
           <td>
-            @Html.DisplayFor(modelItem => item.AppointmentDateTime)
+            @item.AppointmentDateTime.ToString("yyyy-MM-dd HH:mm")
+            @*@Html.DisplayFor(modelItem => item.AppointmentDateTime)*@
           </td>
           <td>
             @Html.DisplayFor(modelItem => item.Patient.LastName)
