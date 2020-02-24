@@ -35,7 +35,22 @@ namespace ClinicAppointments.API.Helper
           Id = app.Id,
           PatientId = app.PatientId,
           SpecialtyId = app.SpecialtyId,
-          AppointmentDateTime = app.AppointmentDateTime
+          AppointmentDateTime = app.AppointmentDateTime,
+          Specialty = new Specialty
+          {
+            Id = app.Specialties.Id,
+            SpecialtyName = app.Specialties.SpecialtyName
+          },
+          Patient = new Patient
+          {
+            Id = app.Patients.Id,
+            Identification = app.Patients.Identification,
+            FirstName = app.Patients.FirstName,
+            LastName = app.Patients.LastName,
+            Age = app.Patients.Age.GetValueOrDefault(),
+            PhoneNumber = app.Patients.PhoneNumber,
+            Email = app.Patients.Email
+          }
         });
       }
 

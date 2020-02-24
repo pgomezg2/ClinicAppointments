@@ -16,7 +16,9 @@
   <hr />
   @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-  <div class="panel panel-default">
+  <div id="msgExistingAppointment" class="alert alert-danger" role="alert" style="display:none"><strong>Error. </strong>Patient already have an appointment for the selected date</div>
+
+  <div class="panel panel-primary">
     <div class="panel-heading">
       <h3 class="panel-title"><strong>Patient information</strong></h3>
     </div>
@@ -59,12 +61,48 @@
           </td>
         </tr>
       </table>
+
+      <table class="table table-condensed table-responsive">
+        <tr>
+          <th>
+            Specialty
+          </th>
+          <th>
+            Date
+          </th>
+          <th>
+            Time
+          </th>
+        </tr>
+
+        <tr>
+          <td>
+            <select class="form-control" id="Specialties" name="Specialties">
+              <option value="0">Select specialty</option>
+            </select>
+            <span id="msgSpecialty" class="text-danger" style="display:none">You must select a specialty</span>
+          </td>
+          <td>
+            <input type="date" class="form-control" id="datePick" placeholder="Date">
+            <span id="msgDate" class="text-danger" style="display:none">You must select a valid date</span>
+          </td>
+          <td>
+            <input type="time" class="form-control" id="timePick" placeholder="Time">
+            <span id="msgTime" class="text-danger" style="display:none">You must select a valid date</span>
+          </td>
+        </tr>
+      </table>
+      <div class="col-md-4">
+        <input type="submit" value="Create" class="btn btn-primary" />
+        @Html.ActionLink("Back to list", "Index", "Patient", null, htmlAttributes: new { @class = "btn btn-danger" })
+
+      </div>
+
     </div>
   </div>
 
-  <div id="msgExistingAppointment" class="alert alert-danger" role="alert" style="display:none"><strong>Error. </strong>Patient already have an appointment for the selected date</div>
 
-  <div class="panel panel-default">
+  <div class="panel panel-default" style="display:none">
     <div class="panel-heading">
       <h3 class="panel-title"><strong>Appointment information</strong></h3>
     </div>
@@ -74,7 +112,7 @@
         @Html.Label("Specialty", "Specialty", htmlAttributes: new { @class = "control-label col-md-2" })
 
         <div class="col-md-10">
-          <select class="form-control" id="Specialties" name="Specialties">
+          <select class="form-control" id="Specialties1" name="Specialties1">
             <option value="0">Select specialty</option>
           </select>
           <span id="msgSpecialty" class="text-danger" style="display:none">You must select a specialty</span>
@@ -104,12 +142,13 @@
       <div class="form-group">
         <div class="col-md-10">
           <input type="submit" value="Create" class="btn btn-primary" />
+
         </div>
       </div>
     </div>
   </div>
 
-  <div class="panel panel-default">
+  <div class="panel panel-info">
     <div class="panel-heading">
       <h3 class="panel-title"><strong>Patient appointments</strong></h3>
     </div>
@@ -136,7 +175,7 @@
                 @Html.DisplayFor(model => item.AppointmentDateTime)
               </td>
               <td>
-                @Html.ActionLink("Delete appointment", "Delete", "Appointment", new { id = item.Id }, null)
+                @Html.ActionLink("Cancel appointment", "Delete", "Appointment", new { id = item.Id }, null)
               </td>
             </tr>
           }
@@ -149,7 +188,7 @@
 </div>
 }
 
-<div>
+<div style="display:none">
   @Html.ActionLink("Back to List", "Index")
 </div>
 

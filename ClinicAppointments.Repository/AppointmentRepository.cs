@@ -18,7 +18,7 @@ namespace ClinicAppointments.Repository
 
     public IQueryable<Appointments> GetAppointments()
     {
-      return _context.Appointments.AsQueryable();
+      return _context.Appointments.Include("Patients").Include("Specialties").AsQueryable();
     }
 
     public IQueryable<Appointments> GetAppointmentsByPatient(int patientId)

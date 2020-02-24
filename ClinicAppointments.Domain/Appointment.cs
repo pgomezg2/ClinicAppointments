@@ -14,5 +14,6 @@ namespace ClinicAppointments.Domain
     public DateTime AppointmentDateTime { get; set; }
 
     public Specialty Specialty { get; set; }
+    public Patient Patient { get; set; }
   }
 }

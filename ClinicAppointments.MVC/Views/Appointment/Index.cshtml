@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ClinicAppointments.MVC.Models.AppointmentModel>
+
+@{
+  ViewBag.Title = "Index";
+}
+
+<h2>Current list of appointmens by patient</h2>
+
+<p>
+  @Html.ActionLink("View patients list", "Index", "Patient", null, htmlAttributes: new { @class = "btn btn-primary" })
+  @Html.ActionLink("Create new patient", "Create", "Patient", null, htmlAttributes: new { @class = "btn btn-default" })
+</p>
+<hr />
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>
+          @Html.DisplayNameFor(model => model.Patient.FirstName)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Patient.LastName)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Patient.PhoneNumber)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.AppointmentDateTime)
+        </th>
+        <th>
+          @Html.DisplayNameFor(model => model.Specialty.SpecialtyName)
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var item in Model)
+      {
+        <tr>
+          <td>
+            @Html.DisplayFor(modelItem => item.Patient.FirstName)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Patient.LastName)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Patient.PhoneNumber)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.AppointmentDateTime)
+          </td>
+          <td>
+            @Html.DisplayFor(modelItem => item.Patient.LastName)
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

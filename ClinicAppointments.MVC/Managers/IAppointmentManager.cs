@@ -5,6 +5,8 @@ namespace ClinicAppointments.MVC.Managers
 {
   public interface IAppointmentManager
   {
+    IEnumerable<AppointmentModel> GetAppointments();
+
     AppointmentModel GetAppointmentCreationInformation(int patientId);
 
     string CreateAppointment(AppointmentModel appointment);

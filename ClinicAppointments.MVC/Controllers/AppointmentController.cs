@@ -18,7 +18,7 @@ namespace ClinicAppointments.MVC.Controllers
     // GET: Appointment
     public ActionResult Index()
     {
-      return View();
+      return View(_appointmentManager.GetAppointments());
     }
 
     // GET: Appointment/Details/5

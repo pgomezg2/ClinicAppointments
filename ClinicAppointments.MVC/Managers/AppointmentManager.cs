@@ -29,6 +29,36 @@ namespace ClinicAppointments.MVC.Managers
     }
 
     /// <summary>
+    /// Get the full list of appointments
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<AppointmentModel> GetAppointments()
+    {
+      string strResponse = string.Empty;
+      IEnumerable<AppointmentModel> appointments = Enumerable.Empty<AppointmentModel>();
+
+      using (HttpClient clientApi = new HttpClient())
+      {
+        // Set the baseaddress from settings
+        clientApi.BaseAddress = _apiBaseAddress;
+
+        // Set the proper headers
+        clientApi.DefaultRequestHeaders.Clear();
+
+        // No specific resource and content needs to be set
+        Task<HttpResponseMessage> response = clientApi.GetAsync("appointment");
+
+        if (response.Result.IsSuccessStatusCode)
+        {
+          strResponse = response.Result.Content.ReadAsStringAsync().Result;
+          appointments = JsonConvert.DeserializeObject<List<AppointmentModel>>(strResponse);
+        }
+      }
+
+      return appointments;
+    }
+
+    /// <summary>
     /// Get the basic patient information for appointment creation
     /// </summary>
     /// <param name="patientId"></param>

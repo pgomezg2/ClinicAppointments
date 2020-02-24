@@ -8,7 +8,7 @@
   @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-  <div class="navbar navbar-fixed-top">
+  <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -19,7 +19,7 @@
         @Html.ActionLink("Clinic Appointments", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
+        @*<ul class="nav navbar-nav">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Patients <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -27,7 +27,7 @@
               <li>@Html.ActionLink("List", "Index", "Patient")</li>
             </ul>
           </li>
-          @*<li class="dropdown">
+          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Appointments <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li>@Html.ActionLink("Create", "Create", "Appointment")</li>
@@ -36,8 +36,8 @@
             </ul>
           </li>
           <li>@Html.ActionLink("About", "About", "Home")</li>
-          <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-        </ul>
+          <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+        </ul>*@
       </div>
     </div>
   </div>

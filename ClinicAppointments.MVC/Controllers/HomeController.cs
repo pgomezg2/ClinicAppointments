@@ -10,7 +10,7 @@ namespace ClinicAppointments.MVC.Controllers
   {
     public ActionResult Index()
     {
-      return View();
+      return RedirectToAction("Index", "Appointment");
     }
 
     public ActionResult About()

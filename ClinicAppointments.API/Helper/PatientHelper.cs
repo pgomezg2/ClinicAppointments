@@ -36,7 +36,7 @@ namespace ClinicAppointments.API.Helper
           Identification = pt.Identification,
           FirstName = pt.FirstName,
           LastName = pt.LastName,
-          Age = 0,
+          Age = pt.Age.GetValueOrDefault(),
           PhoneNumber = pt.PhoneNumber,
           Email = pt.Email
         });
@@ -62,7 +62,7 @@ namespace ClinicAppointments.API.Helper
           Identification = ptDb.Identification,
           FirstName = ptDb.FirstName,
           LastName = ptDb.LastName,
-          Age = 0,
+          Age = ptDb.Age.GetValueOrDefault(),
           PhoneNumber = ptDb.PhoneNumber,
           Email = ptDb.Email,
           Appointments = Enumerable.Empty<Appointment>().ToList()
