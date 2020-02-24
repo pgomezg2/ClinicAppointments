@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -38,6 +40,37 @@ namespace ClinicAppointments.MVC.Managers
       };
 
       return model;
+    }
+
+    public string CreateAppointment(AppointmentModel appointment)
+    {
+      string responseMessage = string.Empty;
+
+      using (HttpClient clientApi = new HttpClient())
+      {
+        // Set the baseaddress
+        clientApi.BaseAddress = _apiBaseAddress;
+
+        // Set the proper headers
+        clientApi.DefaultRequestHeaders.Clear();
+        clientApi.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+        // Set the body
+        string body = JsonConvert.SerializeObject(appointment);
+        StringContent data = new StringContent(body, Encoding.UTF8, "application/json");
+
+        // Do the request
+        Task<HttpResponseMessage> response = clientApi.PostAsync("appointment", data);
+
+        // Check the response code
+        if (!response.Result.IsSuccessStatusCode)
+        {
+          responseMessage = response.Result.ReasonPhrase;
+        }
+      }
+
+      return responseMessage;
+
     }
   }
 }

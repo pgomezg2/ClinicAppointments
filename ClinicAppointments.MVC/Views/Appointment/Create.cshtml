@@ -8,7 +8,7 @@
 
 <h2>Create patient appointment</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createAppointmentForm" }))
 {
   @Html.AntiForgeryToken()
 
@@ -21,7 +21,8 @@
       <h3 class="panel-title"><strong>Patient information</strong></h3>
     </div>
     <div class="panel-body">
-      @Html.HiddenFor(model => model.Patient.Id, htmlAttributes : new { @id = "patientId" })
+      @Html.HiddenFor(model => model.Patient.Id, htmlAttributes: new { @id = "patientId" })
+
       <table class="table table-condensed table-responsive">
         <tr>
           <th>
@@ -66,25 +67,41 @@
       <h3 class="panel-title"><strong>Appointment information</strong></h3>
     </div>
     <div class="panel-body">
-      <div class="form-group">
+      <div id="grpSpecialty" class="form-group">
+        @Html.Hidden("specialtyId", "0", htmlAttributes: new { @id = "specialtyId" })
         @Html.Label("Specialty", "Specialty", htmlAttributes: new { @class = "control-label col-md-2" })
 
-        <select class="form-control" id="Specialties" name="Specialties">
-          <option value="0">Select specialty</option>
-        </select>
+        <div class="col-md-10">
+          <select class="form-control" id="Specialties" name="Specialties">
+            <option value="0">Select specialty</option>
+          </select>
+          <span id="msgSpecialty" class="text-danger" style="display:none">You must select a specialty</span>
+        </div>
       </div>
-      <div class="form-group">
+      <br /><br />
+      <div id="grpDate" class="form-group">
+        @Html.Hidden("dateSelected", "0", htmlAttributes: new { @id = "dateSelected" })
         @Html.Label("Date", "Date", htmlAttributes: new { @class = "control-label col-md-2" })
-        <input type="date" class="form-control" id="datePick" placeholder="Date">
+
+        <div class="col-md-10">
+          <input type="date" class="form-control" id="datePick" placeholder="Date">
+          <span id="msgDate" class="text-danger" style="display:none">You must select a valid date</span>
+        </div>
       </div>
-      <div class="form-group">
+      <br /><br />
+      <div id="grpTime" class="form-group">
+        @Html.Hidden("timeSelected", "0", htmlAttributes: new { @id = "timeSelected" })
         @Html.Label("Time", "Time", htmlAttributes: new { @class = "control-label col-md-2" })
-        <input type="time" class="form-control" id="timePick" placeholder="Time">
+
+        <div class="col-md-10">
+          <input type="time" class="form-control" id="timePick" placeholder="Time">
+          <span id="msgTime" class="text-danger" style="display:none">You must select a valid date</span>
+        </div>
       </div>
 
       <div class="form-group">
         <div class="col-md-10">
-          <input type="button" value="Create" class="btn btn-primary" onclick="createAppointment();" />
+          <input type="submit" value="Create" class="btn btn-primary" />
         </div>
       </div>
     </div>
@@ -103,18 +120,26 @@
           <th>
             @Html.DisplayNameFor(model => model.AppointmentDateTime)
           </th>
+          <th></th>
         </tr>
-        @foreach (var item in Model.Patient.Appointments)
+        @if (Model.Patient.Appointments != null)
         {
-          <tr>
-            <td>
-              @Html.DisplayFor(model => item.Specialty.SpecialtyName)
-            </td>
-            <td>
-              @Html.DisplayFor(model => item.AppointmentDateTime)
-            </td>
-          </tr>
+          foreach (var item in Model.Patient.Appointments)
+          {
+            <tr>
+              <td>
+                @Html.DisplayFor(model => item.Specialty.SpecialtyName)
+              </td>
+              <td>
+                @Html.DisplayFor(model => item.AppointmentDateTime)
+              </td>
+              <td>
+                @Html.ActionLink("Delete appointment", "Delete", "Appointment", new { id = item.Id }, null)
+              </td>
+            </tr>
+          }
         }
+
       </table>
     </div>
   </div>
@@ -133,6 +158,12 @@
 
     $(document).ready(function () {
       loadSpecialties();
+
+      $("#createAppointmentForm").submit(function (e) {
+        if (!validateInformation()) {
+          e.preventDefault();
+        }
+      });
     })
 
     function loadSpecialties() {
@@ -153,5 +184,66 @@
       });
     }
 
+    function validateInformation() {
+      var appointmentDate = $("#datePick").val();
+      var appointmentTime = $("#timePick").val();
+      var SpecialtyId = $("#Specialties").val();
+
+      if (SpecialtyId == 0) {
+        $("#grpSpecialty").addClass('has-error');
+        $("#msgSpecialty").show();
+        return false;
+      }
+      else {
+        $("#grpSpecialty").removeClass('has-error');
+        $("#msgSpecialty").hide();
+        $("#specialtyId").val(SpecialtyId);
+      }
+
+      if (!appointmentDate) {
+        $("#grpDate").addClass('has-error');
+        $("#msgDate").show();
+        return false;
+      }
+      else {
+        $("#grpDate").removeClass('has-error');
+        $("#msgDate").hide();
+        $("#dateSelected").val(appointmentDate);
+      }
+
+      if (!appointmentTime) {
+        $("#grpTime").addClass('has-error');
+        $("#msgTime").show();
+        return false;
+      }
+      else {
+        $("#grpTime").removeClass('has-error');
+        $("#msgTime").hide();
+        $("#timeSelected").val(appointmentTime);
+      }
+
+      return true;
+    }
+
+    function createAppointment() {
+      var fullDateTime = $("#datePick").val() + " " + $("#timePick").val();
+
+      var appointmentModel = {
+        PatientId: $("#patientId").val(),
+        SpecialtyId: $("#Specialties").val(),
+        AppointmentDateTime: fullDateTime
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "http://local.clinicappointmentsapi.com/api/appointment",
+        data: JSON.stringify(appointmentModel),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (result) {
+          temporal(result);
+        }
+      });
+    }
   </script>
 }

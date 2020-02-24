@@ -40,9 +40,21 @@ namespace ClinicAppointments.MVC.Controllers
     {
       try
       {
-        // TODO: Add insert logic here
+        string strDateTimeSelected = string.Format("{0} {1}", collection["dateSelected"], collection["timeSelected"]);
 
-        return RedirectToAction("Index", "Patient");
+        DateTime.TryParse(strDateTimeSelected, out DateTime dateTimeSelected);
+
+        // TODO: Add insert logic here
+        AppointmentModel appointment = new AppointmentModel
+        {
+          PatientId = Convert.ToInt16(collection["patient.Id"]),
+          SpecialtyId = Convert.ToInt16(collection["specialtyId"]),
+          AppointmentDateTime = dateTimeSelected
+        };
+
+        string msg = _appointmentManager.CreateAppointment(appointment);
+
+        return RedirectToAction("Create", "Appointment", new { id = appointment.PatientId });
       }
       catch
       {
